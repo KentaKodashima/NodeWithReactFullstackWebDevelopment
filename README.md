@@ -85,3 +85,6 @@ Specify the command to run or start our server. In order to do so, just add a sc
 ```
 
 4. Create .gitignore file
+
+## PassportJS
+Passport is authentication middleware for Node.js. It helps handling auth in Express apps.
