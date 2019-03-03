@@ -88,3 +88,35 @@ Specify the command to run or start our server. In order to do so, just add a sc
 
 ## PassportJS
 Passport is authentication middleware for Node.js. It helps handling auth in Express apps.
+
+```
+passport.use(
+  new GoogleStrategy({
+    clientID: keys.googleClientID,
+    clientSecret: keys.googleClientSecret,
+    callbackURL: '/auth/google/callback'
+  }, (accessToken) => {
+    console.log(accessToken)
+  })  
+)
+
+// Calling GoogleStrategy just configured
+// This is possible because GoogleStrategy has the internal identifier called 'google'
+// 'scope' tells Google's server that what our application needs
+app.get(
+  '/auth/google', 
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+)
+```
+
+## OAuth
+### redirect_uri
+Bad people can bring users to their website to get users' personal info by changing redirect_uri to their website's URL. Therefore, redirect URIs need to be authorized to prevent users from being hacked.
+```
+https://accounts.google.com/o/oauth2/v2/auth?
+response_type=code&
+redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Fgoogle%2Fcallback&scope=profile%20email&
+client_id=someones_client_id
+```
