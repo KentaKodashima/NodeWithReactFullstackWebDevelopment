@@ -111,6 +111,12 @@ app.get(
 )
 ```
 
+### serializeUser
+serializeUser is automatically called by passport with the user model which has been created when the user signs up.
+
+### deserializeUser
+deserializeUser is automatically called by passport with the token to reach into the user model.
+
 ## OAuth
 ### redirect_uri
 Bad people can bring users to their website to get users' personal info by changing redirect_uri to their website's URL. Therefore, redirect URIs need to be authorized to prevent users from being hacked.
@@ -120,3 +126,60 @@ response_type=code&
 redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Fgoogle%2Fcallback&scope=profile%20email&
 client_id=someones_client_id
 ```
+
+## Statelessness of HTTP
+By default, infomation related to different requests is not shared between those requests. Even after the user login, therefore, when the app tries to fetch the user's info such as posts, it cannot recognize the user.
+
+In order to solve this problem, the server gives `cookie: token` to the browser(user) as a proof of the login state. When the browser sents different requests, use this proof to properly fetch the user's data.
+
+## Signing in flow
+### Email/Password
+1. Sign up
+2. Sign out
+3. Login with the same email/password
+
+### OAuth(Google)
+1. Sign up with Google profile
+2. Sign out
+3. Login with Google profile
+
+In OAuth, the sign up and login auth flows are the same. Therefore, we need to find some unique identifying token in the user's Google profile.
+
+## MongoDB
+Mongo internally stores records into different collections. Every different collection can have many different records.
+
+### MongoDB is Schemaless DB
+Inside of a one single collection, every record can have its own very distinct set of properties.  
+**Note:** In traditional relational DB such as SQL, every single records must have exact same properties.
+
+### mongoose.js
+mongoose.js helps us to create MongoDB's type of structure in JS world.
+'Collection' in MongoDB is represented as 'Model Class' and 'record' in MongoDB is represented as 'Model Instance'.
+
+Unlike MongoDB itself, it needs to know all of different properties that our records will have using `Schema`.
+
+#### Setting up a model class
+User.js
+```
+const mongoose = require('mongoose')
+const { Schema } = mongoose
+
+const userSchema = new Schema({
+  googleId: String
+})
+
+// Create a collection(model class)
+mongoose.model('users', userSchema)
+```
+index.js
+```
+// Need to include this line at the top to make sure User is recognized
+//   when the app first boots up.
+require('./models/User')
+```
+
+### Dev and Prod Environment
+- Need to set up different projects for each environment on Atlas  
+  **Note:** Better to use completely different username and password for security reasons
+- Need to set up different projects for each environment on Google Developer Console  
+  **Note:** Better to use completely different username and password for security reasons
