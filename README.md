@@ -183,3 +183,34 @@ require('./models/User')
   **Note:** Better to use completely different username and password for security reasons
 - Need to set up different projects for each environment on Google Developer Console  
   **Note:** Better to use completely different username and password for security reasons
+  
+## Client server and Express server
+- Express server  
+  Send JSON stuff to the browser
+- React server  
+  Send JS/JSX stuff to the browser
+  
+## Create-react-app's Proxy - Handling routing in Dev Encironment
+A little bit work is needed to make routing work between Express server and React server.
+
+1. Install the library called `http-proxy-middleware`
+2. Create the file called `setupProxy.js`
+3. Configure the proxy inside of the `setupProxy.js` file
+
+```
+const proxy = require('http-proxy-middleware');
+ 
+module.exports = function(app) {
+  app.use(
+    proxy(
+      '/auth/google', // context
+      { target: 'http://localhost:5000' }) // target
+    );
+};
+```
+
+**Explaination**
+Every time the React app needs data from API, the request goes to `create-react-app` proxy. By setting up the proxy, given context is wired up with the target and forward the request to the target.
+
+**Note:**
+All of these works are only for dev environment because there would only be Express server in prod environment. 
