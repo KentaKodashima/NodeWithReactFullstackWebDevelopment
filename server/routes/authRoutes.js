@@ -18,13 +18,14 @@ module.exports = app => {
 
   // route 3
   app.get(
-    'api/logout', (req, res) => {
+    '/api/logout', (req, res) => {
       req.logout()
-      req.send(req.user) // empty user
+      res.send(req.user) // empty user
     }
   )
 
   // route 4
+  // The request to this route gives us the current user's status(login/logout)
   app.get(
     '/api/current_user', (req, res) => {
       res.send(req.user)

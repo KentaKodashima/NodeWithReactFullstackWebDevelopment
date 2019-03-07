@@ -214,3 +214,12 @@ Every time the React app needs data from API, the request goes to `create-react-
 
 **Note:**
 All of these works are only for dev environment because there would only be Express server in prod environment. 
+
+## Webpack with CSS
+index.js
+```
+import 'materialize-css/dist/css/materialize.min.css'
+```
+
+**Note:** If we don't use relative path in an `import` statement, React automatically recognize it is inside of the node_modules.
+
