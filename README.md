@@ -224,6 +224,7 @@ import 'materialize-css/dist/css/materialize.min.css'
 **Note:** If we don't use relative path in an `import` statement, React automatically recognize it is inside of the node_modules.
 
 ## Redirecting a User on Auth
+### Login
 After the user successfully log in, the error saying `Cannot GET /auth/google/callback` appears. In order to avoid this, we need to redirect the user back to the app.
 
 1. The user comes to `/auth/google/callback`
@@ -238,3 +239,17 @@ app.get(
     }
 )
 ```
+
+### Logout
+We need to empty the cookie. There are two ways to do that.
+1. Full HTTP Request  
+Will cause the entire browser page to refresh
+2. AJAX Request  
+No page refresh, but we have to handle action creators, reducer, etc, and redirect to landing page
+
+## Link and anchor tags
+### Link
+Navigate to a different route rendered by React Router
+
+### anchor
+Navigate to a completely different HTML document 
