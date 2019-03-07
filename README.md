@@ -223,3 +223,18 @@ import 'materialize-css/dist/css/materialize.min.css'
 
 **Note:** If we don't use relative path in an `import` statement, React automatically recognize it is inside of the node_modules.
 
+## Redirecting a User on Auth
+After the user successfully log in, the error saying `Cannot GET /auth/google/callback` appears. In order to avoid this, we need to redirect the user back to the app.
+
+1. The user comes to `/auth/google/callback`
+2. `passport.authenticate('google'` does its work and pass the request on to the handler in the chain
+3. Redirect the user
+```
+app.get(
+    '/auth/google/callback', 
+    passport.authenticate('google'), // middleware
+    (req, res) => {
+      res.redirect('/surveys')
+    }
+)
+```

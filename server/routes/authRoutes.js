@@ -13,7 +13,10 @@ module.exports = app => {
   // Will return accessToken
   app.get(
     '/auth/google/callback', 
-    passport.authenticate('google')
+    passport.authenticate('google'), // middleware
+    (req, res) => {
+      res.redirect('/surveys')
+    }
   )
 
   // route 3
