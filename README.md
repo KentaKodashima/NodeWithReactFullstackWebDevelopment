@@ -1,6 +1,24 @@
 # Node with React: Fullstack Web Development
 This is the repository to store what I'm learning in the Udemy course titled 'Node with React: Fullstack Web Development' by Stephen Grider.
 
+1. [Objective](#Objective)
+2. [Node and Express](#Node-and-Express)
+3. [Common JS Modules](#Common-JS-Modules)
+4. [Express](#Express)
+5. [Deployment using Heroku](#Deployment-using-Heroku)
+6. [PassportJS](#PassportJS)
+7. [OAuth](#OAuth)
+8. [Signing in flow](#Signing-in-flow)
+9. [MongoDB](#MongoDB)
+10. [Client server and Express server](#Client-server-and-Express-server)
+11. [Create-react-app's Proxy - Handling routing in Dev Encironment](#Create-react-app-Proxy---Handling-routing-in-Dev-Encironment)
+12. [Webpack with CSS](#Webpack-with-CSS)
+13. [Redirecting a User on Auth](#Redirecting-a-User-on-Auth)
+14. [Link and anchor tags](#Link-and-anchor-tags)
+15. [Billing with Stripe](#Billing-with-Stripe)
+
+
+
 ## Objective
 Learning fullstack development by building a web app using React, Redux, Node.js, Express and MongoDB.
 
@@ -190,7 +208,7 @@ require('./models/User')
 - React server  
   Send JS/JSX stuff to the browser
   
-## Create-react-app's Proxy - Handling routing in Dev Encironment
+## Create-react-app Proxy - Handling routing in Dev Encironment
 A little bit work is needed to make routing work between Express server and React server.
 
 1. Install the library called `http-proxy-middleware`
@@ -253,3 +271,13 @@ Navigate to a different route rendered by React Router
 
 ### anchor
 Navigate to a completely different HTML document 
+
+## Billing with Stripe
+1. User clicks 'Add credits'
+2. Tell Stripe to show a credit card form
+3. User enters credit card details
+4. The details sent from the form to Stripe
+5. Stripe sends back a token representing the charge
+6. We send token to API
+7. API confirms the charge was successful with Stripe
+9. Add credits to the user account
