@@ -16,6 +16,7 @@ This is the repository to store what I'm learning in the Udemy course titled 'No
 13. [Redirecting a User on Auth](#Redirecting-a-User-on-Auth)
 14. [Link and anchor tags](#Link-and-anchor-tags)
 15. [Billing with Stripe](#Billing-with-Stripe)
+16. [Route-Specific Middlewares](#Route---Specific-Middlewares)
 
 
 
@@ -281,3 +282,94 @@ Navigate to a completely different HTML document
 6. We send token to API
 7. API confirms the charge was successful with Stripe
 9. Add credits to the user account
+
+### Configuration
+- amount: In cents
+- token: Expecting to receive a callback with the token (onToken)
+- stripeKey: Publishable key
+
+```
+<ReactStripeCheckout
+    amount={500}
+    token={token => console.log(token)}
+    stripeKey={process.env.REACT_APP_STRIPE_KEY}
+/>
+```
+
+### Helpers
+#### Stripe (NPM module)
+The Stripe Node library provides convenient access to the Stripe API from applications written in server-side JavaScript.
+
+#### body-parser
+Node.js body parsing middleware. Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
+
+### Creating a charge
+
+billingRoutes.js (backend)
+
+```
+const keys = require('../config/keys')
+const stripe = require('stripe')(keys.stripeSecretKey)
+
+module.exports = app => {
+  app.post('/api/stripe', async (req, res) => {
+    // Logic to handle the token
+    
+    // 1. Create Charge obj
+    const charge = await stripe.charges.create({
+      amount: 500,
+      currency: 'usd',
+      description: '$5 for 5 credits',
+      source: req.body.id
+    })
+
+    // Update the User obj using passport's user
+    req.user.credits += 5
+    const user = await req.user.save()
+
+    // send back response
+    res.send(user)
+  })
+}
+```
+
+## Route-Specific Middlewares
+1. Create custom middleware (middlewares/requireLogin)
+2. Assign the middleware as one of the route's args
+
+requireLogin.js (custom middleware)
+```
+// next: Passes the req to the next middleware on the chain
+module.exports = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).send({ error: 'You need to log in first!' })
+  }
+
+  // Move on to the next if there is an user
+  next()
+}
+```
+
+billingRoutes.js
+```
+const requireLogin = require('../middlewares/requireLogin')
+
+module.exports = app => {
+  // requireLogin is the custom middleware to check if the user is logged in or not
+  //  which is called whenever request is sent to '/api/stripe'
+  app.post('/api/stripe', requireLogin, async (req, res) => {
+    // Logic to handle the token
+    const charge = await stripe.charges.create({
+      amount: 500,
+      currency: 'usd',
+      description: '$5 for 5 credits',
+      source: req.body.id
+    })
+
+    req.user.credits += 5
+    const user = await req.user.save()
+
+    res.send(user)
+  })
+}
+```
