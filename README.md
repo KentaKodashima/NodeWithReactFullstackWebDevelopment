@@ -373,3 +373,10 @@ module.exports = app => {
   })
 }
 ```
+
+## Express Server in Production
+We define some routes in React-side of the app. However, server-side of the app also has some routes to handle AJAX requests. Therefore, we need to tell Express server which side of the app to use in order to avoid HTTP errors.
+
+1. Routes in Express sever
+2. Routes in index.html
+3. Routes in main.js
