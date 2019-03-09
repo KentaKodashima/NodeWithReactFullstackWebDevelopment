@@ -10,13 +10,13 @@ This is the repository to store what I'm learning in the Udemy course titled 'No
 7. [OAuth](#OAuth)
 8. [Signing in flow](#Signing-in-flow)
 9. [MongoDB](#MongoDB)
-10. [Client server and Express server](#Client-server-and-Express-server)
-11. [Create-react-app's Proxy - Handling routing in Dev Encironment](#Create-react-app-Proxy---Handling-routing-in-Dev-Encironment)
-12. [Webpack with CSS](#Webpack-with-CSS)
-13. [Redirecting a User on Auth](#Redirecting-a-User-on-Auth)
-14. [Link and anchor tags](#Link-and-anchor-tags)
-15. [Billing with Stripe](#Billing-with-Stripe)
-16. [Route-Specific Middlewares](#Route---Specific-Middlewares)
+10. [Dev and Prod Environment](#Dev-and-Prod-Environment)
+11. [Webpack with CSS](#Webpack-with-CSS)
+12. [Redirecting a User on Auth](#Redirecting-a-User-on-Auth)
+13. [Link and anchor tags](#Link-and-anchor-tags)
+14. [Billing with Stripe](#Billing-with-Stripe)
+15. [Route-Specific Middlewares](#Route---Specific-Middlewares)
+16. [Express Server in Production](Express-Server-in-Production)
 
 
 
@@ -167,6 +167,8 @@ In OAuth, the sign up and login auth flows are the same. Therefore, we need to f
 ## MongoDB
 Mongo internally stores records into different collections. Every different collection can have many different records.
 
+**Note:** Size limit for 1 record = 4MB
+
 ### MongoDB is Schemaless DB
 Inside of a one single collection, every record can have its own very distinct set of properties.  
 **Note:** In traditional relational DB such as SQL, every single records must have exact same properties.
@@ -197,19 +199,38 @@ index.js
 require('./models/User')
 ```
 
-### Dev and Prod Environment
+### Subdocument Collections
+We use subdocument collections whenever we want to make clear associations between records.
+
+### Relationship Fields
+`_user` means `Survey` has reference to another collection. `type` will store the specific user's id. `ref` tells mongoose the reference belongs to the `User` collection.
+```
+const surveySchema = new Schema({
+  title: String,
+  body: String,
+  subject: String,
+  recipients: [RecipientScheme],
+  yea: { type: Number, default: 0 },
+  no: { type: Number, default: 0 },
+  _user: { type: Scheme.Types.ObjectId, ref: 'User' }, // Relationship fields
+  dateSent: Date,
+  lastResponded: Date
+})
+```
+
+## Dev and Prod Environment
 - Need to set up different projects for each environment on Atlas  
   **Note:** Better to use completely different username and password for security reasons
 - Need to set up different projects for each environment on Google Developer Console  
   **Note:** Better to use completely different username and password for security reasons
   
-## Client server and Express server
+### Client server and Express server
 - Express server  
   Send JSON stuff to the browser
 - React server  
   Send JS/JSX stuff to the browser
   
-## Create-react-app Proxy - Handling routing in Dev Encironment
+### Create-react-app Proxy - Handling routing in Dev Encironment
 A little bit work is needed to make routing work between Express server and React server.
 
 1. Install the library called `http-proxy-middleware`
@@ -380,3 +401,46 @@ We define some routes in React-side of the app. However, server-side of the app 
 1. Routes in Express sever
 2. Routes in index.html
 3. Routes in main.js
+
+### Heroku build step
+In order to avoind pushing the `build/` directory to Github, we need to run `yarn build` after deployment. The config script below is saying 'Skip pruning | install all the dependencis in `client/` | then `build` the client side of the app.'
+```
+"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn add --prefix client && yarn build --prefix client"
+```
+
+### Configuration to make routing work
+1. Check `client/build`
+2. If no files match Express side routes or `client/build`, just serve `index.html`
+
+```
+// Configuration to make static page routing work in production
+if(process.env.NODE_ENV === 'production'){
+  // Express will serve up production assets
+  // like our main.js file, or main.css file
+  app.use(express.static('client/build'))
+
+  // Express will serve up the index.html file
+  //   if it doesn't recognize the route (Kicks back to React side)
+  const path = require('path')
+  app.get('*',(req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  })
+}
+```
+
+## Survey Creation
+### Flow
+1. The user create a survey with a 'yes/no' question
+2. Express server creates an email template
+3. Use 3rd party email provider to send email
+4. End user clicks 'yes' or 'no' response
+5. Email provider notes response
+6. Email provider sends notes to our Express server
+7. Express server records feedback in Mongo
+
+## Email Handling
+### What to use
+- SendGrid
+- SendGrid helper NPM module
+
+ 
