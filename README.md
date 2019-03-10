@@ -218,6 +218,27 @@ const surveySchema = new Schema({
 })
 ```
 
+### Mongo Operators
+Using Mongo operators, we can find and update records much more efficiently than fetching all records including subdocs and writing logic to find and update the record.
+- $elemMatch  
+  Find the specific subdocument.
+- $inc  
+
+- $set  
+Update one of the properties.
+```
+Survey.updateOnne({
+  id: surveyId,
+  recipients: {
+    $elemMatch: { email: email, responded: false }
+  }
+}, {
+  $inc: { [choice]: 1 }
+  // $ === $elemMatch
+  $set: { 'recipients.$.responded': true }
+})
+```
+
 ## Dev and Prod Environment
 - Need to set up different projects for each environment on Atlas  
   **Note:** Better to use completely different username and password for security reasons
@@ -537,3 +558,20 @@ Passing a callback to toggle component state.
 
 **NOTE:**  
 The decision between Redux and Component State depends on if we use the state in other components or not.
+
+## Handling Webhook
+- SendGrid: Setting - Mail Setting - Event Notification
+
+### Pitfalls
+1. The user might click twice in a row
+2. The URL might be wrong
+3. The event type might be wrong
+4. The email address might be wrong
+
+### Validation Strategy
+1. map() list of webhooks
+2. Extract the path from the URL ('/api/survey/5135/yes)
+3. Extract the ID and the 'choice' ( {surveyId: '5135', choice: 'yes'} )
+4. Return survey ID, email and choice
+5. Remove the undefined records
+6. Remove records with duplicate email and surveyId
