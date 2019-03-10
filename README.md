@@ -443,4 +443,97 @@ if(process.env.NODE_ENV === 'production'){
 - SendGrid
 - SendGrid helper NPM module
 
- 
+## Redux-Form
+It takes inputs and store it into Redux Store. The key for the reduxForm reducer is expected to be `form`.
+
+reducers/index.js
+```
+import { combineReducers } from "redux";
+import { reducer as reduxForm } from 'redux-form'
+
+import authReducer from './authReducer'
+
+export default combineReducers({
+  auth: authReducer,
+  form: reduxForm
+})
+```
+
+- reduxForm  
+`reduxForm` is a helper function from redux-form. It allows our component to comunicate with the redux store. (Similar to `connect`)
+
+- Field  
+A component from redux-form. It is a component that we can use to show any type of different input.
+```
+import React, { Component } from 'react'
+import { reduxForm, Field } from 'redux-form'
+
+class SurveyForm extends Component {
+  render() {
+    return (
+      <div>
+        <Field
+          type="text"
+          name="surveyTitle" // The name of the props
+          component="input" // Type of HTML tag
+        />
+      </div>
+    )
+  }
+}
+
+export default reduxForm({
+  form: 'surveyForm' // expecting to have 'surveyTitle'
+})(SurveyForm)
+``` 
+
+- handleSubmit()
+The function is provided to us automatically by the `reduxForm`. The function that we pass would be automatically called whenever the user submit a form.
+
+### Form Validation
+We can pass a function to the key named `validate`. The function will automatically run whenever the user submits a form.
+```
+const validate = (values) => {
+  const errors = {}
+
+  // || '' handles the case that there is no email
+  errors.emails = validateEmails(values.emails || '')
+
+  _.each(FIELDS, ({ name }) => {
+    // values.name refers to the value itself ||| name: 'value'
+    if (!values[name]) {
+      errors[name] = 'You must provide a value'
+    }
+  })
+
+  return errors
+}
+
+export default reduxForm({
+  validate,
+  form: 'surveyForm', // Would be the name of the key in Redux Store
+  destroyOnUnmount: false // keep the values
+})(SurveyForm)
+```
+
+- meta: touched  
+Check if the Field is touched or not.
+
+- destroyOnUnmount: true/false 
+Keep the values inside the form even though the component is not shown
+
+### Email List Validation
+**Strategy**
+1. split(',')
+2. map(email => email.trim())
+
+## Toggling Visibility
+1. Seperate Route  
+Can't handle the case that the user goes directly to `http://localhost:3000/survey/new/review`
+2. Redux  
+Add state to handle toggling.
+3. Component State  
+Passing a callback to toggle component state.
+
+**NOTE:**  
+The decision between Redux and Component State depends on if we use the state in other components or not.
