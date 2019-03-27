@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchSurveys } from '../../actions'
+import { fetchSurveys, deleteSurvey } from '../../actions'
 
 class SurveyList extends Component{
   componentDidMount() {
@@ -10,20 +10,28 @@ class SurveyList extends Component{
   renderSurveys() {
     return this.props.surveys.reverse().map(survey => {
       return (
-        <div className="card grey lighten-2" key={survey._id}>
-          <div className="card-content" >
-            <span className="card-title">{survey.title}</span>
-            <p>
-              {survey.body}
-            </p>
-            <p className="right">
-              Sent On: { new Date(survey.sendDate).toLocaleDateString() }
-            </p>
-          </div>
-          <div className="card-action">
-            <a className="red-text text-accent-1">Yes: {survey.yes}</a>
-            <a className="red-text text-accent-1">No: {survey.no}</a>
-          </div>
+        <div className="col s6" key={survey._id} >
+          <div className="card grey lighten-2">
+            <div className="card-content" >
+              <span className="card-title">{survey.title}</span>
+              <p>
+                {survey.body}
+              </p>
+              <p className="right">
+                Sent On: { new Date(survey.sendDate).toLocaleDateString() }
+              </p>
+            </div>
+            <div className="card-action">
+              <a className="red-text text-accent-1">Yes: {survey.yes}</a>
+              <a className="red-text text-accent-1">No: {survey.no}</a>
+              <button
+                className="btn-floating btn-small waves-effect waves-light red right"
+                onClick={() => this.props.deleteSurvey(survey._id)}
+              >
+                <i className="material-icons">delete_forever</i>
+              </button>
+            </div>
+        </div>
         </div>
       )
     })
@@ -33,9 +41,7 @@ class SurveyList extends Component{
     return (
       <div>
         <div className="row">
-          <div className="col s6">
-            {this.renderSurveys()}
-          </div>
+          {this.renderSurveys()}
         </div>
       </div>
     )
@@ -48,5 +54,5 @@ const mapStateToProps = ({ surveys }) => {
 
 export default connect(
   mapStateToProps,
-  { fetchSurveys }
+  { fetchSurveys, deleteSurvey }
 )(SurveyList)

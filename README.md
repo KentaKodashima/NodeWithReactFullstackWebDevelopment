@@ -14,6 +14,7 @@ QESurvey is a survey creation web app. The users can create their own survey onl
 ### Back-end
 - Node.js
 - Express
+- body-parser
 - Google OAuth
 - Passport.js
 - Stripe API

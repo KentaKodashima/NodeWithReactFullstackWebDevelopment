@@ -12,10 +12,21 @@ const Survey = mongoose.model('surveys')
 module.exports = app => {
   app.get('/api/surveys', requireLogin, async (req, res) => {
     const surveys = await Survey.find({ _user: req.user.id }).select({
+      // Exclude the recipients field
       recipients: false
     })
 
     res.send(surveys)
+  })
+
+  app.delete('/api/surveys', requireLogin, async (req, res) => {
+    const { surveyId } = req
+
+    Survey.findByIdAndRemove(surveyId, err => {
+      if (err) return res.status(500).send(err)
+
+      return res.status(200).send({})
+    })
   })
 
   app.get('/api/surveys/:surveyId/:choice', (req, res) => {
