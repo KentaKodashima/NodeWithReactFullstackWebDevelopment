@@ -21,6 +21,7 @@ QESurvey is a survey creation web app. The users can create their own survey onl
 - Mongoose
 - MongoDB 
 - SendGrid (Sending emails)
+- http-proxy-middleware (Make proxy work in the latest CRA)
 
 ## Functionalities
 - Authenticate a user using Google OAuth
