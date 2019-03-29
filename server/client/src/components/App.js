@@ -1,3 +1,4 @@
+import './App.css'
 import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { connect } from "react-redux"
@@ -19,7 +20,7 @@ class App extends React.Component {
         <BrowserRouter>
           <div>
             <Header />
-            <div className="container">
+            <div className="container content-container">
               <Route path="/" exact component={Landing} />
               <Route path="/surveys" component={Dashboard} />
               <Route path="/survey/new" component={SurveyNew} />

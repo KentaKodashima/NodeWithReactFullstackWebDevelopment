@@ -20,21 +20,25 @@ const SurveyFormReview = ({ onCancel, formValues, submitSurvey, history }) => {
 
   return (
     <div>
-      <h5>Please confirm your entries.</h5>
-      {reviewFields}
-      <button
-        className="yellow darken-3 btn-flat white-text"
-        onClick={onCancel}
-      >
-        Cancel
-      </button>
-      <button
-        className="green btn-flat right white-text"
-        onClick={() => submitSurvey(formValues, history)} // Has to be an arrow function otherwise it is executed instantly
-      >
-        Send Servey
-        <i className="material-icons right">email</i>
-      </button>
+      <h5>Please confirm your entries</h5>
+      <div style={{ marginBottom: '16px' }}>
+        {reviewFields}
+      </div>
+      <div>
+        <button
+          className="orange accent-3 btn-flat white-text"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <button
+          className="deep-purple lighten-1 btn-flat right white-text"
+          onClick={() => submitSurvey(formValues, history)} // Has to be an arrow function otherwise it is executed instantly
+        >
+          Send Servey
+          <i className="material-icons right">email</i>
+        </button>
+      </div>
     </div>
   )
 }

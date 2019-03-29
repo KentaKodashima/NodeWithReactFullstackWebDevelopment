@@ -1,7 +1,12 @@
-.list-container {
-  padding-top: 45px;
-}
-
 .card-body {
   margin-bottom: 16px;
+}
+
+.custom-button {
+  max-width: 300px;
+}
+
+.no-survey-container {
+  text-align: center;
+  margin: 0 auto;
 }

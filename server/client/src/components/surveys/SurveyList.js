@@ -2,6 +2,7 @@ import './SurveyList.css'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchSurveys, deleteSurvey } from '../../actions'
+import {Link} from "react-router-dom";
 
 class SurveyList extends Component{
   componentDidMount() {
@@ -18,13 +19,20 @@ class SurveyList extends Component{
 
   renderNoSurveysScreen() {
     return (
-      <div className="col s12" >
-        <p>Create your first survey!</p>
+      <div className="col s12 no-survey-container">
+        <p>You don't have any survey yet!</p>
+        <Link to="/survey/new" className="btn-large custom-button deep-purple lighten-1">
+          Create your first survey!
+        </Link>
       </div>
     )
   }
 
   renderSurveys() {
+    if (this.props.surveys.length === 0) {
+      return this.renderNoSurveysScreen()
+    }
+
     return this.props.surveys.reverse().map(survey => {
       return (
         <div className="col s6" key={survey._id} >
@@ -61,7 +69,7 @@ class SurveyList extends Component{
 
   render() {
     return (
-      <div className="list-container">
+      <div>
         <div className="row">
           {this.renderSurveys()}
         </div>
