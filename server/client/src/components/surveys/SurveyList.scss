@@ -2,8 +2,12 @@
   margin-bottom: 16px;
 }
 
-.custom-button {
+.button-surveylist {
   max-width: 300px;
+
+  &:hover {
+    opacity: 0.6;
+  }
 }
 
 .no-survey-container {

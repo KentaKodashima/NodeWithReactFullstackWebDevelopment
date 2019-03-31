@@ -1,4 +1,4 @@
-import './SurveyList.css'
+import './SurveyList.scss'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchSurveys, deleteSurvey } from '../../actions'
@@ -21,7 +21,7 @@ class SurveyList extends Component{
     return (
       <div className="col s12 no-survey-container">
         <p>You don't have any survey yet!</p>
-        <Link to="/survey/new" className="btn-large custom-button deep-purple lighten-1">
+        <Link to="/survey/new" className="btn-large button-surveylist deep-purple lighten-1">
           Create your first survey!
         </Link>
       </div>
@@ -35,7 +35,7 @@ class SurveyList extends Component{
 
     return this.props.surveys.reverse().map(survey => {
       return (
-        <div className="col s6" key={survey._id} >
+        <div className="col s12 m6 l6" key={survey._id} >
           <div className="card grey lighten-4">
             <div className="card-content" >
               <span className="card-title deep-purple-text text-lighten-1">{survey.title}</span>

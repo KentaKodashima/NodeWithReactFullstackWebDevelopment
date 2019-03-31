@@ -1,0 +1,35 @@
+/*
+======================================================================
+Project Name    : QESurvey
+File Name       : _variables.scss
+Encoding        : UTF-8
+
+Copyright © 2019 Kenta Kodashima. All rights reserved.
+
+This source code or any portion there of must not be
+reproduced or used in any manner whatsoever.
+======================================================================
+*/
+
+@import "variables";
+
+/* ==============
+   Media queries
+  ============= */
+@mixin max-screen($breakPoint) {
+  @media screen and (max-width: $breakPoint) {
+    @content;
+  }
+}
+
+@mixin min-screen($breakPoint) {
+  @media screen and (min-width: $breakPoint) {
+    @content;
+  }
+}
+
+@mixin screen($breakPointMin, $breakPointMax) {
+  @media screen and (min-width: $breakPointMin) and (max-width: $breakPointMax) {
+    @content;
+  }
+}
