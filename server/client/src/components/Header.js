@@ -1,6 +1,6 @@
 import './Header.scss'
 import React, { Component } from 'react'
-import { connect } from "react-redux"
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { slide as Menu } from 'react-burger-menu'
 

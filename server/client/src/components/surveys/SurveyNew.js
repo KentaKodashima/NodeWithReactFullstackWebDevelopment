@@ -1,25 +1,34 @@
+import './RequireLogin.scss'
 import React, { Component } from 'react'
-import { reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form'
+import { connect } from "react-redux"
 
 import SurveyForm from './SurveyForm'
 import SurveyFormReview from './SurveyFormReview'
+import RequireLogin from './RequireLogin'
 
 class SurveyNew extends Component {
-  state = { formReview: false }
+  state = { showFormReview: false }
 
   renderContent() {
-    if (this.state.showFormReview) {
+    if (this.props.auth) {
+      if (this.state.showFormReview) {
+        return (
+          <SurveyFormReview
+            onCancel={() => this.setState({ showFormReview: false })}
+          />
+        )
+      }
+
       return (
-        <SurveyFormReview
-          onCancel={() => this.setState({ showFormReview: false })}
+        <SurveyForm
+          onSurveySubmit={() => this.setState({ showFormReview: true })}
         />
       )
     }
 
     return (
-      <SurveyForm
-        onSurveySubmit={() => this.setState({ showFormReview: true })}
-      />
+      <RequireLogin />
     )
   }
 
@@ -32,7 +41,13 @@ class SurveyNew extends Component {
   }
 }
 
+const mapStateToProps = ({ auth }) => {
+  return { auth }
+}
+
+const surveyNew = connect(mapStateToProps)(SurveyNew)
+
 // Clearing all values when the user clicks Cancel
 export default reduxForm({
   form: 'surveyForm'
-})(SurveyNew)
+})(surveyNew)

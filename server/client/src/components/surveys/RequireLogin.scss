@@ -1,0 +1,13 @@
+.require-login-contents {
+  margin: 0 auto;
+  text-align: center;
+  max-width: 360px;
+}
+
+.button-survey-new {
+  width: 100%;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}

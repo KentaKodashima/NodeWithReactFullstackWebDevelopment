@@ -2,7 +2,9 @@ import './SurveyList.scss'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchSurveys, deleteSurvey } from '../../actions'
-import {Link} from "react-router-dom";
+import {Link} from "react-router-dom"
+
+import RequireLogin from './RequireLogin'
 
 class SurveyList extends Component{
   componentDidMount() {
@@ -29,6 +31,10 @@ class SurveyList extends Component{
   }
 
   renderSurveys() {
+    if (!this.props.auth) {
+      return <RequireLogin />
+    }
+
     if (this.props.surveys.length === 0) {
       return this.renderNoSurveysScreen()
     }
@@ -78,8 +84,8 @@ class SurveyList extends Component{
   }
 }
 
-const mapStateToProps = ({ surveys }) => {
-  return { surveys }
+const mapStateToProps = ({ surveys, auth }) => {
+  return { surveys, auth }
 }
 
 export default connect(
