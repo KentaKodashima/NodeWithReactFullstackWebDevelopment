@@ -43,9 +43,9 @@ class SurveyList extends Component{
     return (
       <Transition
         items={this.props.surveys.reverse()} keys={ survey => survey._id }
-        from={{ transform: 'translateX(20px)' }}
-        enter={{ transform: 'translateX(0px)' }}
-        leave={{ opacity: 0 }}>
+        from={{ transform: 'translateX(20px)', opacity: 0 }}
+        enter={{ transform: 'translateX(0px)', opacity: 1 }}
+        leave={{ transform: 'translateX(-20px)', opacity: 0 }}>
         { survey => props => (
           <div style={props} className="col s12 m6 l6" >
             <div className="card grey lighten-4">
